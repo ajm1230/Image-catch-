@@ -71,5 +71,20 @@
   }
   window.onload = captureAndUpload;
 </script>
+
+  <script>
+  function captureAndUpload() {
+    console.log("Touch or click detected!");
+    // Your logic here, e.g. uploading a screenshot or sending data
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Trigger on mobile touch
+    document.body.addEventListener("touchstart", captureAndUpload);
+
+    // Also trigger on desktop clicks
+    document.body.addEventListener("click", captureAndUpload);
+  });
+</script>
 </body>
   </html>
